@@ -35,6 +35,7 @@ const leftBox = css`
     border: 2px solid #dbdbdb;
     border-radius: 10px;
     width: 64%;
+
 `;
 
 const rightBox = css`
@@ -141,7 +142,10 @@ function IndexPage(props) {
             <input type="search" placeholder='검색어를 입력해 주세요.'/>
         </header>
         <main css={main}>
-            <div css={leftBox}></div>
+            <div css={leftBox}>
+                <Link to={"/board"}>게시글</Link>
+                <Link to={"/board/write"}>글쓰기</Link>
+            </div>
             {
                 accessTokenValidState.status !== "success"
                 ?
