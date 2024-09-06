@@ -5,16 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @Builder
-@Data
+@NoArgsConstructor
 @AllArgsConstructor
-public class Board {
+@Data
+public class BoardLike {
     private Long id;
-    private String title;
-    private String content;
+    private Long boardId;
     private Long userId;
-    private int viewCount;
-
-    private User user;
 }

@@ -95,14 +95,56 @@ function WritePage(props) {
     const quillRef = useRef(null);
     const [ isUploading, setUploading ] = useState(false); // true : 로딩중 / false : 로딩완료
 
-    const handleWriteSubmitOnClick = async () => {
-        // instance.post("/board", board);
-        const boardData =  await boardApi(board);
-        // console.log(boardData);
-        // navigate("/user/login");
+    // async await 쓴 예시
+    const handleWriteSubmitOnClick = async() => {
+        try {
+            const response = await instance.post("/board", board); // await을 달수있는 조건 1. async 안에서만 가능 2. promise 여야 한다 
+            alert("작성이 완료되었습니다.");
+            navigate(`/board/detail/${response.data.boardId}`);
+        } catch (error) {
+            const fieldErrors = error.response.data;
 
-        
+                for (let fieldError of fieldErrors) {
+                    if(fieldError.field === "title") {
+                        alert(fieldError.defaultMessage);
+                        return;
+                    }
+                }
+                for (let fieldError of fieldErrors) {
+                    if (fieldError.field === "content") {
+                        alert(fieldError.defaultMessage);
+                        break;
+                    }
+                }
+        }
     }
+
+    // async 와 await을 안쓴 예시 
+    // const handleWriteSubmitOnClick = async () => {
+    //     instance.post("/board", board)
+    //         .then((response) => {
+    //             alert("작성이 완료되었습니다.");
+    //             navigate(`/board/detail/${response.data.boardId}`);
+    //         })
+    //         .catch((error) => {
+    //             const fieldErrors = error.response.data;
+
+    //             for (let fieldError of fieldErrors) {
+    //                 if(fieldError.field === "title") {
+    //                     alert(fieldError.defaultMessage);
+    //                     return;
+    //                 }
+    //             }
+    //             for (let fieldError of fieldErrors) {
+    //                 if (fieldError.field === "content") {
+    //                     alert(fieldError.defaultMessage);
+    //                     break;
+    //                 }
+    //             }
+    //         })
+    //     // const boardData =  await boardApi(board);
+    //     // console.log(boardData);
+    // }
 
     const handleTitleInputOnChange = (e) => {
         setBoard(board => ({

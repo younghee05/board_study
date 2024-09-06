@@ -36,11 +36,18 @@
 --    provider VARCHAR(255) not null
 --);
 
-CREATE TABLE BOARD (
+--CREATE TABLE BOARD (
+--    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+--    title VARCHAR(255) not null,
+--    content LONGTEXT not null,
+--    user_id BIGINT not null
+--);
+
+--ALTER TABLE BOARD ADD COLUMN view_count INT NOT NULL DEFAULT 0;
+--ALTER TABLE 'USER' ADD COLUMN email VARCHAR(255) NOT NULL;
+
+CREATE TABLE board_like(
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255) not null,
-    content LONGTEXT not null,
+    board_id BIGINT not null,
     user_id BIGINT not null
 );
-
---ALTER TABLE 'USER' ADD COLUMN email VARCHAR(255) NOT NULL;
