@@ -5,11 +5,12 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { instance } from "../../../apis/util/instance";
 import { IoMdHeart, IoMdHeartEmpty  } from "react-icons/io";
+import { useState } from "react";
 
 
 const layout = css`
     box-sizing: border-box;
-    margin: 50px auto 0px;
+    margin: 50px auto 300px;
     width: 1100px;
 
 `;
@@ -89,12 +90,154 @@ const boardInfoContainer = css`
     
 `;
 
+const commentContainer = css`
+    margin-bottom: 50px;
+`;
+
+const commentWriteBox = (level) => css`
+    display: flex;
+    box-sizing: border-box;
+    margin-top: 5px;
+    margin-left: ${level * 3}%;
+    height: 80px;
+
+    & > textarea {
+        flex-grow: 1;
+        margin-right: 5px;
+        border: 1px solid #dbdbdb;
+        outline: none;
+        padding: 12px 15px;
+        resize: none;
+    }
+
+    & > button {
+        box-sizing: border-box;
+        border: 1px solid #dbdbdb;
+        width: 80px;
+        background-color: #ffffff;
+        cursor: pointer;
+    }
+`;
+
+const commentListContainer = (level) => css`
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    margin-left: ${level * 2}%;
+    border-bottom: 1px solid #dbdbdb;
+    padding: 12px 15px;
+
+    & > div:nth-of-type(1) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 12px;
+        border: 1px solid #dbdbdb;
+        border-radius: 50%;
+        width: 70px;
+        height: 70px;
+        overflow: hidden;
+        & > img {
+            height: 100%;
+        }
+    }
+
+`;
+
+const commentDetail = css`
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+`;
+
+const detailHeader = css`
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+
+    & > span:nth-of-type(1) {
+        font-weight: 600;
+        cursor: pointer;
+    }
+`;
+
+const detailContent = css`
+    margin-bottom: 10px;
+    max-height: 50px;
+    overflow-y: auto;
+`;
+
+const detailButtons = css`
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    & button {
+        box-sizing: border-box;
+        margin-left: 4px;
+        border: 1px solid #dbdbdb;
+        padding: 5px 10px;
+        background-color: #ffffff;
+        cursor: pointer;
+    }
+    
+`;
+
 function DetailPage(props) {
     const navigate = useNavigate();
     const params = useParams();
     const boardId = params.boardId;
     const queryClient = useQueryClient();
     const userInfoData = queryClient.getQueryData("userInfoQuery");
+
+    const [ selectedCommentId, setSelectCommentId ] = useState(null);
+    const [ commentData, setCommentData ] = useState({
+        boardId, // key 값과 변수명이 같으면 key 값이 생략 가능하다 / boardId: boardId 에서 boardId: 가 생략 된것 
+        parentId: null,
+        content: "",
+
+    });
+
+    const handleReplyButtonOnClick = (commentId) => {
+        setCommentData({
+            boardId,
+            parentId: commentId === commentData.parentId ? null : commentId,
+            content: "",
+        });
+    };
+
+    const handleCommentInputOnChange = (e) => {
+        setCommentData(commentData => ({
+            ...commentData,
+            [e.target.name]: e.target.value,
+        }));
+    };
+
+    const commentMutation = useMutation(
+        async () => {
+            return await instance.post("/board/comment", commentData);
+        },
+        {
+            onSuccess: response => {
+                alert("댓글 작성이 완료되었습니다.");
+                setCommentData({
+                    boardId,
+                    parentId: null,
+                    content: "",
+                });
+                comments.refetch();
+            }
+        }
+    );
+
+    const handleCommentSubmitOnClick = () => {
+            if(!userInfoData?.data) {
+                if(window.confirm("로그인 후 이용가능합니다. 로그인 페이지로 이동하시겠습니까?")) {
+                    navigate("/user/login");
+                }
+                return;
+            }
+            commentMutation.mutateAsync();
+    }
 
     const board = useQuery(
         ["boardQuery", boardId],
@@ -155,6 +298,17 @@ function DetailPage(props) {
         }
     ); 
 
+    const comments = useQuery(
+        ["commentsQuery"],
+        async () => {
+            return instance.get(`/board/${boardId}/comment`);
+        },
+        {
+            retry: 0,
+            onSuccess: response => console.log(response)
+        }
+    )
+
     const handleLikeOnClick = () => {
         console.log(userInfoData);
         if(!userInfoData?.data) {
@@ -189,7 +343,7 @@ function DetailPage(props) {
                                 !!boardLike?.data?.data?.boardLikeId
                                     ?
                                     <button onClick={handledisLikeOnClick}>
-                                        <IoMdHeart />
+                                        <IoMdHeart color="red"/>
                                     </button>
                                     :
                                     <button onClick={handleLikeOnClick}>
@@ -213,7 +367,7 @@ function DetailPage(props) {
                             <div>
                                 {
                                     console.log(userInfoData?.data.userId)
-                                }
+                                },
                                 {
                                     board.data.data.writerId === userInfoData?.data.userId &&
                                     <>
@@ -228,6 +382,60 @@ function DetailPage(props) {
                     <div css={contentBox} dangerouslySetInnerHTML={{
                         __html: board.data.data.content }}>
                     </div>
+                    <div css={commentContainer}>
+                        <h2>댓글{comments?.data?.data.commentCount}</h2>
+                        {
+                            commentData.parentId === null &&
+                            <div css={commentWriteBox(0)}>
+                                <textarea name="content" disabled={commentData.parentId !== null} onChange={handleCommentInputOnChange} value={commentData.content} placeholder="댓글을 입력하세요."></textarea>
+                                <button disabled={commentData.parentId !== null} onClick={handleCommentSubmitOnClick}>작성하기</button>
+                            </div>
+                        }
+                        <div >
+                            {
+                                comments?.data?.data.comments.map(comment =>  
+                                    <>
+                                        <div css={commentListContainer(comment.level)}>
+
+                                            <div>
+                                                <img src="" alt="" />
+                                            </div>
+
+                                            <div css={commentDetail}>
+                                                <div css={detailHeader}>
+                                                    <span>{comment.username}</span>
+                                                    <span>{comment.createDate}</span>
+                                                </div>
+
+                                                <pre css={detailContent}>{comment.content}</pre>
+
+                                                <div css={detailButtons}>
+                                                    {
+                                                        userInfoData?.data?.userId === comment.writerId && 
+                                                        <div>
+                                                            <button>수정</button>
+                                                            <button>삭제</button>
+                                                        </div>
+                                                    }
+                                                    <div>
+                                                        <button onClick={() => handleReplyButtonOnClick(comment.id)}>답글</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                            {
+                                                commentData.parentId === comment.id && 
+                                                <div css={commentWriteBox(comment.level)}>
+                                                    <textarea name="content" onChange={handleCommentInputOnChange} value={commentData.content} placeholder="댓글을 입력하세요."></textarea>
+                                                    <button onClick={handleCommentSubmitOnClick}>작성하기</button>
+                                                </div>
+                                            }
+                                    </>
+                                )
+                            }
+                            
+                        </div>
+                    </div>
                 </>
             }
             
@@ -236,3 +444,7 @@ function DetailPage(props) {
 }
 
 export default DetailPage;
+
+
+
+

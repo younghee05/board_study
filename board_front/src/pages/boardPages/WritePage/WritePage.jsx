@@ -191,6 +191,10 @@ function WritePage(props) {
                     editor.setSelection(editPoint.index + 1);
                     editor.insertText(editPoint.index + 1, "\n");
                     setUploading(false);
+                    setBoard(board => ({
+                        ...board,
+                        content: editor.root.innerHTML,
+                    }));
                 }
             )
         }

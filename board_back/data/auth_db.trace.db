@@ -808,3 +808,426 @@ org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT *
 SELECT[*] * FROM  BOARD_LIKE"; SQL statement:
 SELECT * FROM BOARD 
 SELECT * FROM  BOARD_LIKE [42000-200]
+2024-09-09 09:23:21 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE COMMENT ([*]"; expected "identifier"; SQL statement:
+CREATE TABLE COMMENT ( [42001-200]
+2024-09-09 09:24:03 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE COMMENT ([*]"; expected "identifier"; SQL statement:
+CREATE TABLE COMMENT ( [42001-200]
+2024-09-09 10:43:04 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM COMMENT
+ORDER BY 
+IF[*](PARENT_ID = 0, ID, PARENT_ID)"; expected "=, NOT, EXISTS, INTERSECTS, UNIQUE"; SQL statement:
+select * from comment
+order by 
+if(parent_id = 0, id, parent_id) [42001-200]
+2024-09-09 10:43:35 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM COMMENT
+ORDER BY 
+IF[*](PARENT_ID = 0, ID, PARENT_ID)"; expected "=, NOT, EXISTS, INTERSECTS, UNIQUE"; SQL statement:
+select * from comment
+order by 
+if(parent_id = 0, id, parent_id) [42001-200]
+2024-09-09 11:11:11 jdbc[25]: null
+org.h2.message.DbException: The connection was not closed by the application and is garbage collected [90018-200]
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.get(DbException.java:181)
+	at org.h2.message.DbException.get(DbException.java:170)
+	at org.h2.jdbc.JdbcConnection.closeOld(JdbcConnection.java:245)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:186)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:152)
+	at org.h2.Driver.connect(Driver.java:69)
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:138)
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:364)
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:206)
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:476)
+	at com.zaxxer.hikari.pool.HikariPool.access$100(HikariPool.java:71)
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:726)
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:712)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: The connection was not closed by the application and is garbage collected [90018-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:622)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	... 18 more
+2024-09-09 11:13:10 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO COMMENT
+VALUE[*](DEFAULT, 1, 0, 'aaaa', 1, NOW())"; expected "., (, DIRECT, SORTED, DEFAULT, VALUES, SET, (, WITH, SELECT, TABLE, VALUES"; SQL statement:
+insert into comment
+value(default, 1, 0, 'aaaa', 1, now()) [42001-200]
+2024-09-09 11:14:09 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO COMMENT
+VALUE[*](DEFAULT, 1, 0, 'aaaa', 1, NOW())"; expected "., (, DIRECT, SORTED, DEFAULT, VALUES, SET, (, WITH, SELECT, TABLE, VALUES"; SQL statement:
+insert into comment
+value(default, 1, 0, 'aaaa', 1, now()) [42001-200]
+2024-09-09 11:14:45 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO COMMENT
+VALUE[*](DEFAULT, 1, 0, ""aaaa"", 1, NOW())"; expected "., (, DIRECT, SORTED, DEFAULT, VALUES, SET, (, WITH, SELECT, TABLE, VALUES"; SQL statement:
+insert into comment
+value(default, 1, 0, "aaaa", 1, now()) [42001-200]
+2024-09-09 11:15:20 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "insert into comment
+value(1, 0, aaaa[*]', 1, now());
+
+select * from comment;"; SQL statement:
+insert into comment
+value(1, 0, aaaa', 1, now());
+
+select * from comment; [42000-200]
+2024-09-09 11:15:24 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "insert into comment
+value(1, 0, aaaa[*]', 1, now());
+
+select * from comment;"; SQL statement:
+insert into comment
+value(1, 0, aaaa', 1, now());
+
+select * from comment; [42000-200]
+2024-09-09 11:15:36 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "insert into comment
+value(default, 1, 0, aaaa[*]', 1, now());
+
+select * from comment;"; SQL statement:
+insert into comment
+value(default, 1, 0, aaaa', 1, now());
+
+select * from comment; [42000-200]
+2024-09-09 11:15:38 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "insert into comment
+value(default, 1, 0, aaaa[*]', 1, now());
+
+select * from comment;"; SQL statement:
+insert into comment
+value(default, 1, 0, aaaa', 1, now());
+
+select * from comment; [42000-200]
+2024-09-09 11:15:48 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO COMMENT
+VALUE[*](1, 0, 'aaaa', 1, NOW())"; expected "., (, DIRECT, SORTED, DEFAULT, VALUES, SET, (, WITH, SELECT, TABLE, VALUES"; SQL statement:
+insert into comment
+value(1, 0, 'aaaa', 1, now()) [42001-200]
+2024-09-09 11:16:41 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO COMMENT
+VALUE[*](DEFAULT,1, 0, 'aaaa', 1, NOW())"; expected "., (, DIRECT, SORTED, DEFAULT, VALUES, SET, (, WITH, SELECT, TABLE, VALUES"; SQL statement:
+insert into comment
+value(default,1, 0, 'aaaa', 1, now()) [42001-200]
+2024-09-09 12:42:35 jdbc[65]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CMMENT" not found; SQL statement:
+truncate table cmment [42102-200]
+2024-09-09 13:08:50 jdbc[66]: null
+org.h2.message.DbException: The connection was not closed by the application and is garbage collected [90018-200]
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.get(DbException.java:181)
+	at org.h2.message.DbException.get(DbException.java:170)
+	at org.h2.jdbc.JdbcConnection.closeOld(JdbcConnection.java:245)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:186)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:152)
+	at org.h2.Driver.connect(Driver.java:69)
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:138)
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:364)
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:206)
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:476)
+	at com.zaxxer.hikari.pool.HikariPool.access$100(HikariPool.java:71)
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:726)
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:712)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: The connection was not closed by the application and is garbage collected [90018-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:622)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	... 18 more
+2024-09-09 15:32:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "WITH RECURSIVE COMMENT_TREE(ID, BOARD_ID, PARENT_ID, CONTENT, WRITER_ID, CREATE_DATE, LEVEL, PATH) AS (
+            SELECT
+                ID,
+                BOARD_ID,
+                PARENT_ID,
+                CONTENT,
+                WRITER_ID,
+                CREATE_DATE,
+                0 AS LEVEL,
+                CAST(ID AS VARCHAR(255)) AS PATH
+            FROM
+                COMMENT
+            WHERE
+                PARENT_ID IS NULL
+
+            UNION ALL
+
+            SELECT
+                C.ID,
+                C.BOARD_ID,
+                C.PARENT_ID,
+                C.CONTENT,
+                C.WRITER_ID,
+                C.CREATE_DATE,
+                CT.LEVEL + 1,
+                CONCAT(CT.PATH, ',', C.ID) AS PATH
+            FROM
+                COMMENT C
+                JOIN COMMENT_TREE CT ON C.PARENT_ID = CT.ID
+            )
+
+            SELECT
+                CT.ID,
+                CT.BOARD_ID AS BOARDID,
+                CT.PARENT_ID AS PARENTID,
+                CT.CONTENT,
+                CT.WRITER_ID AS WRITERID,
+                CT.CREATE_DATE AS CREATEDATE,
+                CT.LEVEL,
+                U.USERNAME,
+                U.IMG
+            FROM
+                COMMENT_TREE CT
+                LEFT OUTER JOIN USER U ON(U.ID = CT.WRITER_ID)
+            WHERE
+                CT.BOARD_ID =[*] # BOARDID 
+            ORDER BY
+                PATH"; SQL statement:
+WITH RECURSIVE comment_tree(id, board_id, parent_id, content, writer_id, create_date, level, path) AS (
+            SELECT
+                id,
+                board_id,
+                parent_id,
+                content,
+                writer_id,
+                create_date,
+                0 AS level,
+                CAST(id AS VARCHAR(255)) AS path
+            FROM
+                comment
+            WHERE
+                parent_id IS NULL
+
+            UNION ALL
+
+            SELECT
+                c.id,
+                c.board_id,
+                c.parent_id,
+                c.content,
+                c.writer_id,
+                c.create_date,
+                ct.level + 1,
+                CONCAT(ct.path, ',', c.id) AS path
+            FROM
+                comment c
+                JOIN comment_tree ct ON c.parent_id = ct.id
+            )
+
+            SELECT
+                ct.id,
+                ct.board_id as boardId,
+                ct.parent_id as parentId,
+                ct.content,
+                ct.writer_id as writerId,
+                ct.create_date as createDate,
+                ct.level,
+                u.username,
+                u.img
+            FROM
+                comment_tree ct
+                left outer join user u on(u.id = ct.writer_id)
+            where
+                ct.board_id = # boardId 
+            ORDER BY
+                path [42000-200]
+2024-09-09 15:32:03 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "WITH RECURSIVE COMMENT_TREE(ID, BOARD_ID, PARENT_ID, CONTENT, WRITER_ID, CREATE_DATE, LEVEL, PATH) AS (
+            SELECT
+                ID,
+                BOARD_ID,
+                PARENT_ID,
+                CONTENT,
+                WRITER_ID,
+                CREATE_DATE,
+                0 AS LEVEL,
+                CAST(ID AS VARCHAR(255)) AS PATH
+            FROM
+                COMMENT
+            WHERE
+                PARENT_ID IS NULL
+
+            UNION ALL
+
+            SELECT
+                C.ID,
+                C.BOARD_ID,
+                C.PARENT_ID,
+                C.CONTENT,
+                C.WRITER_ID,
+                C.CREATE_DATE,
+                CT.LEVEL + 1,
+                CONCAT(CT.PATH, ',', C.ID) AS PATH
+            FROM
+                COMMENT C
+                JOIN COMMENT_TREE CT ON C.PARENT_ID = CT.ID
+            )
+
+            SELECT
+                CT.ID,
+                CT.BOARD_ID AS BOARDID,
+                CT.PARENT_ID AS PARENTID,
+                CT.CONTENT,
+                CT.WRITER_ID AS WRITERID,
+                CT.CREATE_DATE AS CREATEDATE,
+                CT.LEVEL,
+                U.USERNAME,
+                U.IMG
+            FROM
+                COMMENT_TREE CT
+                LEFT OUTER JOIN USER U ON(U.ID = CT.WRITER_ID)
+            WHERE
+                CT.BOARD_ID =[*] # BOARDID 
+            ORDER BY
+                PATH"; SQL statement:
+WITH RECURSIVE comment_tree(id, board_id, parent_id, content, writer_id, create_date, level, path) AS (
+            SELECT
+                id,
+                board_id,
+                parent_id,
+                content,
+                writer_id,
+                create_date,
+                0 AS level,
+                CAST(id AS VARCHAR(255)) AS path
+            FROM
+                comment
+            WHERE
+                parent_id IS NULL
+
+            UNION ALL
+
+            SELECT
+                c.id,
+                c.board_id,
+                c.parent_id,
+                c.content,
+                c.writer_id,
+                c.create_date,
+                ct.level + 1,
+                CONCAT(ct.path, ',', c.id) AS path
+            FROM
+                comment c
+                JOIN comment_tree ct ON c.parent_id = ct.id
+            )
+
+            SELECT
+                ct.id,
+                ct.board_id as boardId,
+                ct.parent_id as parentId,
+                ct.content,
+                ct.writer_id as writerId,
+                ct.create_date as createDate,
+                ct.level,
+                u.username,
+                u.img
+            FROM
+                comment_tree ct
+                left outer join user u on(u.id = ct.writer_id)
+            where
+                ct.board_id = # boardId 
+            ORDER BY
+                path [42000-200]
+2024-09-09 15:33:16 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "WITH RECURSIVE COMMENT_TREE(ID, BOARD_ID, PARENT_ID, CONTENT, WRITER_ID, CREATE_DATE, LEVEL, PATH) AS (
+            SELECT
+                ID,
+                BOARD_ID,
+                PARENT_ID,
+                CONTENT,
+                WRITER_ID,
+                CREATE_DATE,
+                0 AS LEVEL,
+                CAST(ID AS VARCHAR(255)) AS PATH
+            FROM
+                COMMENT
+            WHERE
+                PARENT_ID IS NULL
+
+            UNION ALL
+
+            SELECT
+                C.ID,
+                C.BOARD_ID,
+                C.PARENT_ID,
+                C.CONTENT,
+                C.WRITER_ID,
+                C.CREATE_DATE,
+                CT.LEVEL + 1,
+                CONCAT(CT.PATH, ',', C.ID) AS PATH
+            FROM
+                COMMENT C
+                JOIN COMMENT_TREE CT ON C.PARENT_ID = CT.ID
+            )
+
+            SELECT
+                CT.ID,
+                CT.BOARD_ID AS BOARDID,
+                CT.PARENT_ID AS PARENTID,
+                CT.CONTENT,
+                CT.WRITER_ID AS WRITERID,
+                CT.CREATE_DATE AS CREATEDATE,
+                CT.LEVEL,
+                U.USERNAME,
+                U.IMG
+            FROM
+                COMMENT_TREE CT
+                LEFT OUTER JOIN USER U ON(U.ID = CT.WRITER_ID)
+            WHERE
+                CT.BOARD_ID =[*] # BOARDID 
+            ORDER BY
+                PATH"; SQL statement:
+WITH RECURSIVE comment_tree(id, board_id, parent_id, content, writer_id, create_date, level, path) AS (
+            SELECT
+                id,
+                board_id,
+                parent_id,
+                content,
+                writer_id,
+                create_date,
+                0 AS level,
+                CAST(id AS VARCHAR(255)) AS path
+            FROM
+                comment
+            WHERE
+                parent_id IS NULL
+
+            UNION ALL
+
+            SELECT
+                c.id,
+                c.board_id,
+                c.parent_id,
+                c.content,
+                c.writer_id,
+                c.create_date,
+                ct.level + 1,
+                CONCAT(ct.path, ',', c.id) AS path
+            FROM
+                comment c
+                JOIN comment_tree ct ON c.parent_id = ct.id
+            )
+
+            SELECT
+                ct.id,
+                ct.board_id as boardId,
+                ct.parent_id as parentId,
+                ct.content,
+                ct.writer_id as writerId,
+                ct.create_date as createDate,
+                ct.level,
+                u.username,
+                u.img
+            FROM
+                comment_tree ct
+                left outer join user u on(u.id = ct.writer_id)
+            where
+                ct.board_id = # boardId 
+            ORDER BY
+                path [42000-200]
