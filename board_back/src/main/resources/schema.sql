@@ -21,11 +21,11 @@
 --    id BIGINT AUTO_INCREMENT PRIMARY KEY,
 --    name VARCHAR(255) UNIQUE not null
 --);
---
-INSERT INTO ROLE
-VALUES  (DEFAULT, 'ROLE_USER'),
-        (DEFAULT, 'ROLE_MANAGER'),
-        (DEFAULT, 'ROLE_ADMIN');
+----
+--INSERT INTO ROLE
+--VALUES  (DEFAULT, 'ROLE_USER'),
+--        (DEFAULT, 'ROLE_MANAGER'),
+--        (DEFAULT, 'ROLE_ADMIN');
 --
 --CREATE TABLE USER_ROLES (
 --    id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -64,3 +64,10 @@ VALUES  (DEFAULT, 'ROLE_USER'),
 --    writer_id BIGINT NOT NULL,
 --    create_date DATETIME NOT NULL
 --);
+
+--CREATE TRIGGER before_delete_comment
+--BEFORE DELETE ON comment
+--FOR EACH ROW
+--BEGIN
+--    delete from comment where parent_id = old.id -- old.id = 원래 id
+--END;

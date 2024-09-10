@@ -18,8 +18,14 @@ public class CommentController {
         return ResponseEntity.ok().body(true);
     }
 
-    @GetMapping("/board/{boardId}/comment")
+    @GetMapping("/board/{boardId}/comments")
     public ResponseEntity<?> getComments(@PathVariable Long boardId) {
         return ResponseEntity.ok().body(commentService.getComment(boardId));
+    }
+
+    @DeleteMapping("/board/comment/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long commentId) {
+        commentService.deleteComment(commentId);
+        return ResponseEntity.ok().body(true);
     }
 }

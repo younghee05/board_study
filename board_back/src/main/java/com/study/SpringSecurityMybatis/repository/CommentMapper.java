@@ -7,10 +7,17 @@ import java.util.List;
 
 @Mapper
 public interface CommentMapper {
+
     int save(Comment comment);
 
     List<Comment> findAllByBoardId(Long boardId);
 
     int getCommentCountByBoardId(Long boardId);
+
+    int deleteById(Long id);
+
+    Comment findById(Long id);
+
+    Comment findByParentId(Long parentId);
 
 }
