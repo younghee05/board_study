@@ -1,4 +1,5 @@
 package com.study.SpringSecurityMybatis.controller;
+import com.study.SpringSecurityMybatis.dto.request.ReqModifyCommentDto;
 import com.study.SpringSecurityMybatis.dto.request.ReqWriteCommentDto;
 import com.study.SpringSecurityMybatis.dto.response.RespCommentDto;
 import com.study.SpringSecurityMybatis.service.CommentService;
@@ -21,6 +22,13 @@ public class CommentController {
     @GetMapping("/board/{boardId}/comments")
     public ResponseEntity<?> getComments(@PathVariable Long boardId) {
         return ResponseEntity.ok().body(commentService.getComment(boardId));
+    }
+
+    @PutMapping("/board/comment/{commentId}")
+    public ResponseEntity<?> modifyComment(@RequestBody ReqModifyCommentDto dto) {
+        System.out.println(dto); // 데이터가 잘 들어왔는지 확인
+        commentService.modifyComment(dto);
+        return ResponseEntity.ok().body(true);
     }
 
     @DeleteMapping("/board/comment/{commentId}")

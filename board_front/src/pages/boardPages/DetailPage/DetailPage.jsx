@@ -198,6 +198,11 @@ function DetailPage(props) {
 
     });
 
+    const [ commentModifyData, setCommentModifyData ] = useState({
+        commentId: 0,
+        content: "", 
+    });
+
     const board = useQuery(
         ["boardQuery", boardId],
         async () => {
@@ -285,6 +290,20 @@ function DetailPage(props) {
         }
     );
 
+    const modifyCommentMutation = useMutation(
+        async () => await instance.put(`/board/comment/${commentModifyData.commentId}`, commentModifyData),
+        {
+            onSuccess: () => {
+                alert("댓글 수정이 완료되었습니다.");
+                setCommentModifyData({
+                    commentId: 0,
+                    content: "",
+                });
+                comments.refetch();
+            }
+        }
+    );
+
     const deleteCommentMutation = useMutation(
         async (commentId) => await instance.delete(`/board/comment/${commentId}`),
         {
@@ -318,6 +337,13 @@ function DetailPage(props) {
         }));
     };
 
+    const handleCommentModifyInputOnChange = (e) => {
+        setCommentModifyData(commentData => ({
+            ...commentData,
+            [e.target.name]: e.target.value,
+        }));
+    };
+
     const handleCommentSubmitOnClick = () => {
         if(!userInfoData?.data) {
             if(window.confirm("로그인 후 이용가능합니다. 로그인 페이지로 이동하시겠습니까?")) {
@@ -328,6 +354,10 @@ function DetailPage(props) {
         commentMutation.mutateAsync(); // mutate에 async가  붙었으므로 비동기처리됨 
     };
 
+    const handleCommentModifySubmitOnClick = () => {
+        modifyCommentMutation.mutateAsync();
+    }
+
     const handleReplyButtonOnClick = (commentId) => {
         setCommentData(commentData => ({
             boardId,
@@ -335,6 +365,20 @@ function DetailPage(props) {
             content: "",
         }));
     }; 
+
+    const handleModifyCommentButtonOnClick = (commentId, content) => {
+        setCommentModifyData(commentData => ({
+            commentId,
+            content
+        }));
+    }
+
+    const handleModifyCommentCancelButtonOnClick = () => {
+        setCommentModifyData(commentData => ({
+            commentId: 0,
+            content: ""
+        }));
+    }
 
     const handleDeleteCommentButtonOnClick = (commentId) => {
         deleteCommentMutation.mutateAsync(commentId);
@@ -428,11 +472,19 @@ function DetailPage(props) {
                                                     {
                                                         userInfoData?.data?.userId === comment.writerId && 
                                                         <div>
-                                                            <button>수정</button>
+                                                            {
+                                                                commentModifyData.commentId === comment.id
+                                                                ?
+                                                                <button onClick={handleModifyCommentCancelButtonOnClick}>취소</button>
+                                                                :
+                                                                <button onClick={() => handleModifyCommentButtonOnClick(comment.id, comment.content)}>수정</button>
+                                                            }
+                                                            
                                                             <button onClick={() => handleDeleteCommentButtonOnClick(comment.id)}>삭제</button>
                                                         </div>
                                                     }
                                                     {
+                                                        // 대댓글 제한 (3까지)
                                                         comment.level < 3 &&
                                                         <div>
                                                             <button onClick={() => handleReplyButtonOnClick(comment.id)}>답글</button>
@@ -445,8 +497,15 @@ function DetailPage(props) {
                                             {
                                                 commentData.parentId === comment.id && 
                                                 <div css={commentWriteBox(comment.level)}>
-                                                    <textarea name="content" onChange={handleCommentInputOnChange} value={commentData.content} placeholder="댓글을 입력하세요."></textarea>
+                                                    <textarea name="content" onChange={handleCommentInputOnChange} value={commentData.content} placeholder="답글을 입력하세요."></textarea>
                                                     <button onClick={handleCommentSubmitOnClick}>작성하기</button>
+                                                </div>
+                                            }
+                                            {
+                                                commentModifyData.commentId === comment.id && 
+                                                <div css={commentWriteBox(comment.level)}>
+                                                    <textarea name="content" onChange={handleCommentModifyInputOnChange} value={commentModifyData.content}></textarea>
+                                                    <button onClick={handleCommentModifySubmitOnClick}>수정하기</button>
                                                 </div>
                                             }
                                     </div>

@@ -1,5 +1,6 @@
 package com.study.SpringSecurityMybatis.service;
 
+import com.study.SpringSecurityMybatis.dto.request.ReqModifyCommentDto;
 import com.study.SpringSecurityMybatis.dto.request.ReqWriteCommentDto;
 import com.study.SpringSecurityMybatis.dto.response.RespCommentDto;
 import com.study.SpringSecurityMybatis.entity.Comment;
@@ -35,7 +36,20 @@ public class CommentService {
                 .build();
     }
 
+    public void modifyComment(ReqModifyCommentDto dto) {
+
+        accessCheck(dto.getCommentId());
+        commentMapper.updateById(dto.toEntity());
+    }
+
     public void deleteComment(Long commentId) {
+        accessCheck(commentId);
+        commentMapper.deleteById(commentId);
+
+    }
+
+    private void accessCheck(Long commentId) {
+        // 사용자 정보를 가지고 오는 / 다른 사용자의 댓글이 수정또는 삭제가 되면 안되기에
         PrincipalUser principalUser = (PrincipalUser) SecurityContextHolder
                 .getContext()
                 .getAuthentication()
@@ -44,8 +58,5 @@ public class CommentService {
         if(principalUser.getId() != comment.getWriterId()) {
             throw new AccessDeniedException();
         }
-
-        commentMapper.deleteById(commentId);
-
     }
 }
