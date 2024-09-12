@@ -1,6 +1,7 @@
 package com.study.SpringSecurityMybatis.controller;
 
 import com.study.SpringSecurityMybatis.aspect.annotation.ValidAop;
+import com.study.SpringSecurityMybatis.dto.request.ReqBoardListDto;
 import com.study.SpringSecurityMybatis.dto.request.ReqWriteBoardDto;
 import com.study.SpringSecurityMybatis.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,11 @@ public class BoardController {
     @PostMapping("/board")
     public ResponseEntity<?> write(@Valid @RequestBody ReqWriteBoardDto dto, BindingResult bindingResult) {
         return ResponseEntity.ok().body(Map.of("boardId", boardService.writeBoard(dto)));
+    }
+
+    @GetMapping("/board/list")
+    public ResponseEntity<?> getBoard(ReqBoardListDto dto) {
+        return ResponseEntity.ok().body(boardService.getBoardList(dto));
     }
 
     // 로그인을 안해도 게시글 조회, 추천 조회를 가능하겠끔 만들어야한다

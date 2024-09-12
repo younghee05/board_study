@@ -143,7 +143,7 @@ function IndexPage(props) {
         </header>
         <main css={main}>
             <div css={leftBox}>
-                <Link to={"/board"}>게시글</Link>
+                <Link to={"/board/number"}>게시글</Link>
                 <Link to={"/board/write"}>글쓰기</Link>
             </div>
             {
