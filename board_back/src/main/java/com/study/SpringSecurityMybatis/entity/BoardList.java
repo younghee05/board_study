@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class BoardList {
     private Long id;
     private String title;
+    private String content;
     private String writerName;
     private Integer likeCount;
     private Integer viewCount;

@@ -40,25 +40,25 @@ const paginateContainer = css`
 `;
 
 function NumberBoardListPage(props) {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [ totalPageCount, setTotalPageCount ] = useState(1);
-
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams(); // 주소:포토/페이지URL?key=value(쿼리스트링, 파람스)
+    const [ totalPageCount, setTotalPageCount ] = useState(1);
     const limit = 10;
 
     const boardList = useQuery(
-        ["boardListQuery", searchParams.get("page")],
+        ["boardListQuery", searchParams.get("page")], // page가 바뀔때마다 boardListQuery가 실행된다.
         async () => await instance.get(`/board/list?page=${searchParams.get("page")}&limit=${limit}`),
         {
             retry: 0,
-            onSuccess: response => setTotalPageCount(response.data.totalCount % limit === 0 
-                ? response.data.totalCount / limit 
-                : (response.data.totalCount / limit) + 1)
+            onSuccess: response => setTotalPageCount(
+                response.data.totalCount % limit === 0 
+                    ? response.data.totalCount / limit 
+                    : Math.floor(response.data.totalCount / limit) + 1)
         }
     );
 
-    const handlePageOnChange = (event) => {
-        navigate(`/board/number?page=${event.selected + 1}`);
+    const handlePageOnChange = (e) => {
+        navigate(`/board/number?page=${e.selected + 1}`);
     }
     
 
@@ -80,7 +80,7 @@ function NumberBoardListPage(props) {
                         boardList.isLoading
                         ?
                         <></>
-                        :
+                        : // loding이 끝나면 
                         boardList?.data?.data.boards.map(board => 
                             <tr key={board.id} onClick={() => navigate(`/board/detail/${board.id}`)}>
                                 <td>{board.id}</td>
@@ -98,12 +98,12 @@ function NumberBoardListPage(props) {
                     breakLabel="..."
                     previousLabel={<><IoMdArrowDropleft /></>}
                     nextLabel={<><IoMdArrowDropright /></>}
-                    pageCount={totalPageCount - 1}
+                    pageCount={totalPageCount}
                     marginPagesDisplayed={2}
                     pageRangeDisplayed={5}
                     activeClassName='active'
                     onPageChange={handlePageOnChange}
-                    forcePage={parseInt(searchParams.get("page")) - 1}
+                    forcePage={parseInt(searchParams.get("page")) - 1} // 페이지 번호를 수동적으로 칠때 그 페이지번호로 넘어갈 수 있는
 
                 />
             </div>

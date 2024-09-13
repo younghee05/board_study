@@ -62,6 +62,7 @@
         select
             b.id,
             b.title,
+            b.content,
             u.username as writerName,
             ifnull(lc.like_cnt, 0) as likeCount,
             b.view_count as viewCount
