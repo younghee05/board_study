@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
 /** @jsxImportSource @emotion/react */
@@ -35,6 +35,10 @@ const leftBox = css`
     border: 2px solid #dbdbdb;
     border-radius: 10px;
     width: 64%;
+
+    & a {
+        margin-right: 10px;
+    }
 
 `;
 
@@ -119,13 +123,25 @@ function IndexPage(props) {
 
     const queryClient = useQueryClient();
     // const data = queryClient.getQueryData("accessTokenValidQuery");
-    const userInfoState = queryClient.getQueryState("userInfoQuery"); // useQuery의 상태 
     const accessTokenValidState = queryClient.getQueryState("accessTokenValidQuery"); // useQuery의 상태 
+    const userInfoState = queryClient.getQueryState("userInfoQuery"); // useQuery의 상태 
+    const searchRef = useRef();
+    const [ searchValue, setSearchValue ] = useState("");
     // console.log(data);
     // console.log(state); // 무슨 상태인지 확인 할 수 있다 / idle : 요청준비중인 상태 / loding : 로딩중 
 
-    console.log(accessTokenValidState);
-    console.log(userInfoState);
+    // console.log(accessTokenValidState);
+    // console.log(userInfoState);
+
+    const handleSearchInputOnChange = (e) => {
+        setSearchValue(e.target.value);
+    }
+
+    const handleSearchInputOnKeyDown = (e) => {
+        if(e.keyCode === 13) {
+            navigate(`/board/search?page=1&option=all&search=${searchValue}`);
+        }
+    }
 
     const handleLoginButtonOnClick = () => {
         navigate("/user/login");
@@ -139,11 +155,17 @@ function IndexPage(props) {
     return (
         <div css={layout}>
         <header css={header}>
-            <input type="search" placeholder='검색어를 입력해 주세요.'/>
+            <input type="search" 
+            onChange={handleSearchInputOnChange} 
+            onKeyDown={handleSearchInputOnKeyDown}
+            placeholder='검색어를 입력해 주세요.'/>
         </header>
+        
         <main css={main}>
             <div css={leftBox}>
-                <Link to={"/board/number"}>게시글</Link>
+                <Link to={"/board/number?page=1"}>게시글 번호</Link>
+                <Link to={"/board/scroll"}>게시글 스크롤</Link>
+                <Link to={"/board/search?page=1"}>게시글 검색</Link>
                 <Link to={"/board/write"}>글쓰기</Link>
             </div>
             {

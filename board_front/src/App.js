@@ -14,6 +14,7 @@ import WritePage from './pages/boardPages/WritePage/WritePage';
 import DetailPage from './pages/boardPages/DetailPage/DetailPage';
 import NumberBoardListPage from './pages/boardPages/NumberBoardListPage/NumberBoardListPage';
 import ScrollBoardListPage from './pages/boardPages/ScrollBoardListPage/ScrollBoardListPage';
+import SearchBoardPage from './pages/boardPages/SearchBoardPage/SearchBoardPage';
 
 function App() {
 
@@ -133,6 +134,7 @@ function App() {
                 <Route path="/user/login/oauth2" element={ <OAuth2LoginPage /> }/>
                 <Route path="/profile" element={ <UserProfilePage /> }/>
 
+                <Route path="/board/search" element={ <SearchBoardPage /> }/> 
                 <Route path="/board/number" element={ <NumberBoardListPage /> }/> 
                 <Route path="/board/scroll" element={ <ScrollBoardListPage /> }/> 
                 <Route path="/board/detail/:boardId" element={ <DetailPage/> }/> 

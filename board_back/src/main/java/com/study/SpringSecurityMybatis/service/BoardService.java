@@ -1,6 +1,7 @@
 package com.study.SpringSecurityMybatis.service;
 
 import com.study.SpringSecurityMybatis.dto.request.ReqBoardListDto;
+import com.study.SpringSecurityMybatis.dto.request.ReqSearchBoardDto;
 import com.study.SpringSecurityMybatis.dto.request.ReqWriteBoardDto;
 import com.study.SpringSecurityMybatis.dto.response.RespBoardDetailDto;
 import com.study.SpringSecurityMybatis.dto.response.RespBoardLikeInfoDto;
@@ -18,6 +19,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class BoardService {
@@ -37,6 +40,24 @@ public class BoardService {
         boardMapper.save(board);
         return board.getId();
 
+    }
+
+    public RespBoardListDto getSearchBoard(ReqSearchBoardDto dto) {
+        Long startIndex = (dto.getPage() - 1) * dto.getLimit();
+        Map<String, Object> params = Map.of(
+                "startIndex", startIndex,
+                "limit", dto.getLimit(),
+                "searchValue", dto.getSearch() == null ? "" : dto.getSearch(), // 문자열 null로 받아오지 않게 방지
+                "option", dto.getOption() == null ? "all" : dto.getOption()
+        );
+
+        List<BoardList> boardLists = boardMapper.findAllBySearch(params);
+        Integer boardTotalCount = boardMapper.getCountAllBySearch(params); // 검색했을 때 페이지 수를 제한으로 두는 것
+
+        return RespBoardListDto.builder()
+                .boards(boardLists)
+                .totalCount(boardTotalCount)
+                .build();
     }
 
     public RespBoardListDto getBoardList(ReqBoardListDto dto) {

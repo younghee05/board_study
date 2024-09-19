@@ -198,7 +198,7 @@ function ScrollBoardListPage(props) {
                         }
 
                         return (
-                            <li key={board.id} css={card}>
+                            <li key={board.id} css={card} onClick={() => navigate(`/board/detail/${board.id}`)}> 
                                 <main css={cardMain}>
                                     {
                                         mainImgStartIndex != -1 &&
