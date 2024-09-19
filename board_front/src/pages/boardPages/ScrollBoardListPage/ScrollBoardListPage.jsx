@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { useEffect, useRef, useState } from 'react';
 import { IoMdHeart } from 'react-icons/io';
 import { useInfiniteQuery } from 'react-query';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { instance } from '../../../apis/util/instance';
 
 const layout = css`
@@ -131,32 +131,42 @@ const cardFooter = css`
 
 // 무한 스크롤
 function ScrollBoardListPage(props) {
-
+    const navigate = useNavigate();
     const loadMoreRef = useRef(null);
-    const [ currentPage, setCurrentPage ] = useState(1);
     const limit = 20;
 
     // useInfiniteQuery 는 무한 스크롤할 때 쓰이는 query이다.
     const boardList = useInfiniteQuery(
         ["boardScrollQuery"],
-        async ({pageParam = 1}) => await instance.get(`/board/list?page=${pageParam}&limit=${limit}`),
+        async ({ pageParam = 1 }) => await instance.get(`/board/list?page=${pageParam}&limit=${limit}`),
         {
             // null 이거나 undifind이면 null 아니면 lastPage.nextPage인 그대로 값이 리턴된다.
-            getNextPageParam: (lastPage, allPage) => lastPage.nextPage ?? null,
-            onSuccess: response => console.log(response)
+            getNextPageParam: (lastPage, allPage) => {
+                const totalPageCount = lastPage.data.totalCount % limit === 0
+                    ? lastPage.data.totalCount / limit
+                    : Math.floor(lastPage.data.totalCount / limit) + 1;
+
+                return totalPageCount !== allPage.length ? allPage.length + 1 : null;
+            }
             
         }
     );
 
     useEffect(() => {
-        const observer = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) {
-                console.log("div 보임!!!");
+        if (!boardList.hasNextPage || !loadMoreRef.current) {
+            return;
+        }
+
+        const observer = new IntersectionObserver(([intersectionObserver]) => {
+            if (intersectionObserver.isIntersecting) {
+                boardList.fetchNextPage();
             }
         }, { threshold: 1.0 });
 
-        observer.observe(loadMoreRef.current)
-    }, []);
+        observer.observe(loadMoreRef.current);
+
+        return () => observer.disconnect();
+    }, [boardList.hasNextPage]);
 
     return (
         <div css={layout}>
@@ -165,13 +175,28 @@ function ScrollBoardListPage(props) {
                 {
                     boardList.data?.pages.map(page => page.data.boards.map(board => {
                         const mainImgStartIndex = board.content.indexOf("<img"); // img로 부터 열리는 index를 찾는
-                        console.log(mainImgStartIndex);
-
                         let mainImg = board.content.slice(mainImgStartIndex);
                         mainImg = mainImg.slice(0, mainImg.indexOf(">") + 1);
                         const mainImgSrc = mainImg.slice(mainImg.indexOf("src") + 5, mainImg.length - 2) // " 전까지 자르는 
 
-                        console.log(mainImgSrc);
+                        let mainContent = board.content;
+                        while (true) {
+                            const pIndex = mainContent.indexOf("<p>");
+                            if (pIndex === -1) {
+                                mainContent = "";
+                                break;
+                            }
+                            mainContent = mainContent.slice(pIndex + 3);
+                            if (mainContent.indexOf("<img") !== 0) {
+                                if (mainContent.includes("<img")) {
+                                    mainContent = mainContent.slice(0, mainContent.indexOf("<img"));
+                                    break;
+                                }
+                                mainContent = mainContent.slice(0, mainContent.indexOf("</p>"));
+                                break;
+                            }
+                        }
+
                         return (
                             <li key={board.id} css={card}>
                                 <main css={cardMain}>
@@ -182,19 +207,19 @@ function ScrollBoardListPage(props) {
                                         </div>
                                     }
                                     <div css={cardContent(mainImgStartIndex != -1)}>
-                                        <h3>테스트 글입니다. 문자열이 길어지면 이렇게 표시하세요 </h3>
-                                        <div>testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest</div>
+                                        <h3>{board.title}</h3>
+                                        <div dangerouslySetInnerHTML={{ __html: mainContent }}></div>
                                     </div>
                                 </main>
                                 <footer css={cardFooter}>
                                     {/* 사용자 */}
                                     <div>
-                                        <img src="" alt="" />
+                                        <img src={board.writerProfileImg} alt="" />
                                         <span>by</span>
-                                        user12
+                                        {board.writerName}
                                     </div>
                                     {/* 좋아요 갯수 */}
-                                    <div><IoMdHeart color='red' /><span>10</span></div>
+                                    <div><IoMdHeart color='red' /><span>{board.likeCount}</span></div>
                                 </footer>
                             </li>
                         )

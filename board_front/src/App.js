@@ -139,7 +139,7 @@ function App() {
                 <Route path="/board/write" element={ <WritePage /> }/>
 
                 <Route path="/admin/*" element={ <></> }/>
-
+                
                 {/* Not Found 구간 */}
                 <Route path="/admin/*" element={ <h1>Not Found</h1> }/>
                 <Route path="*" element={ <h1>Not Found</h1> }/>
