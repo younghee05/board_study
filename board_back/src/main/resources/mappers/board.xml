@@ -33,6 +33,23 @@
             id = #{id}
     </update>
 
+    <update id="modifyBoard">
+        update board
+        set
+            title = #{title}
+            content = #{content}
+        where
+            id = #{id}
+    </update>
+
+    <delete id="deleteBoardById">
+        delete
+        from
+            board
+        where
+            id = #{id}
+    </delete>
+
     <select id="findById" resultMap="boardResultMap">
         select
             b.id as board_id,

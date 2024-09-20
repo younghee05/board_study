@@ -53,6 +53,13 @@
             where
                 id in(select id from comment_tree)
     </delete>
+    <delete id="deleteByBoardId">
+        delete
+        from
+            comment
+        where
+            board_id = #{boardId}
+    </delete>
 
     <select id="findAllByBoardId" resultType="com.study.SpringSecurityMybatis.entity.Comment">
         WITH RECURSIVE comment_tree(id, board_id, parent_id, content, writer_id, create_date, level, path) AS (

@@ -16,6 +16,8 @@ public interface CommentMapper {
 
     int deleteById(Long id);
 
+    int deleteByBoardId(Long boardId);
+
     int updateById(Comment comment);
 
     Comment findById(Long id);

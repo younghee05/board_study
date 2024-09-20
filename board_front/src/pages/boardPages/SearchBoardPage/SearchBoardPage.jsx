@@ -43,7 +43,8 @@ function SearchBoardPage(props) {
     const navigate = useNavigate();
     const [ searchParams, setSearchParams ] = useSearchParams(); // 주소:포토/페이지URL?key=value(쿼리스트링, 파람스)
     const [ totalPageCount, setTotalPageCount ] = useState(1);
-    const [ searchValue, setSearchValue ] = useState(searchParams.get("search") ?? "");
+    // 왼쪽 값이 null 또는 undefined인 경우 오른쪽 값을 사용
+    const [ searchValue, setSearchValue ] = useState(searchParams.get("search") ?? ""); // searchParams.get("search")가 null이거나 undefined이면 빈 문자열("")을 초기값으로 사용하겠다는 의미
     const [ searchOption, setSearchOption ] = useState(searchParams.get("option") ?? "all");
     const limit = 10;
 
@@ -52,7 +53,7 @@ function SearchBoardPage(props) {
         async () => await instance.get(`/board/search?page=${searchParams.get("page")}&limit=${limit}&search=${searchValue}&option=${searchOption}`), // 문자열로 nulldl
         {
             retry: 0,
-            refetchOnWind00000000000000000owFocus: false,
+            refetchOnWindowFocus: false,
                 onSuccess: response => setTotalPageCount(
                     response.data.totalCount % limit === 0 
                         ? response.data.totalCount / limit 

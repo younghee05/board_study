@@ -16,6 +16,10 @@ public interface BoardMapper {
 
     Board findById(Long id);
 
+    int modifyBoard(Board board);
+
+    int deleteBoardById(Long id);
+
     List<BoardList> findAllByStartIndexAndLimit(
             @Param("startIndex") Long startIndex,
             @Param("limit") Long limit);

@@ -203,6 +203,7 @@ function DetailPage(props) {
         content: "", 
     });
 
+    // useQuery
     const board = useQuery(
         ["boardQuery", boardId],
         async () => {
@@ -242,7 +243,22 @@ function DetailPage(props) {
         }
     );
 
+    // useMutation 
     // useQuery와 비슷 = useMutation
+
+    // 게시글 삭제 & 수정
+    const deleteBoardMutation = useMutation(
+        async (boardId) => await instance.delete(`/board/detail/${boardId}`),
+        {
+            onSuccess: response => {
+                alert("게시글을 삭제하였습니다.");
+                navigate("/board/number?page=1");
+                board.refetch();
+            }
+        }
+    );
+
+    // 추천 상태
     const likeMutation = useMutation(
         async () => {
             await instance.post(`/board/${boardId}/like`)
@@ -273,6 +289,7 @@ function DetailPage(props) {
         }
     ); 
 
+    // 댓글 상태
     const commentMutation = useMutation(
         async () => {
             return await instance.post("/board/comment", commentData);
@@ -309,11 +326,22 @@ function DetailPage(props) {
         {
             onSuccess: response => {
                 alert("댓글을 삭제하였습니다.");
-                comments.refetch();
+                comments.refetch(); 
             }
         }
     );
 
+    // 게시글 수정 & 삭제
+    const handleDeleteOnClick = () => {
+        deleteBoardMutation.mutateAsync(boardId);
+        
+    };
+
+    const handleModifyOnClick = () => {
+        navigate(`/board/modify/${boardId}`);
+    }
+
+    // 추천버트
     const handleLikeOnClick = () => {
         console.log(userInfoData);
         if(!userInfoData?.data) {
@@ -329,6 +357,7 @@ function DetailPage(props) {
         dislikeMutation.mutateAsync();
     };
 
+    // 댓글 기능
     const handleCommentInputOnChange = (e) => {
         // comment의 데이터의 상태를 바꾸고 있음 
         setCommentData(commentData => ({
@@ -431,8 +460,8 @@ function DetailPage(props) {
                                 {
                                     board.data.data.writerId === userInfoData?.data.userId &&
                                     <>
-                                        <button>수정</button>
-                                        <button>삭제</button>
+                                        <button onClick={handleModifyOnClick}>수정</button>
+                                        <button onClick={handleDeleteOnClick}>삭제</button>
                                     </>
                                 }
                             </div>

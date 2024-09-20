@@ -1,6 +1,7 @@
 package com.study.SpringSecurityMybatis.service;
 
 import com.study.SpringSecurityMybatis.dto.request.ReqBoardListDto;
+import com.study.SpringSecurityMybatis.dto.request.ReqModifyBoardDto;
 import com.study.SpringSecurityMybatis.dto.request.ReqSearchBoardDto;
 import com.study.SpringSecurityMybatis.dto.request.ReqWriteBoardDto;
 import com.study.SpringSecurityMybatis.dto.response.RespBoardDetailDto;
@@ -9,9 +10,11 @@ import com.study.SpringSecurityMybatis.dto.response.RespBoardListDto;
 import com.study.SpringSecurityMybatis.entity.Board;
 import com.study.SpringSecurityMybatis.entity.BoardLike;
 import com.study.SpringSecurityMybatis.entity.BoardList;
+import com.study.SpringSecurityMybatis.exception.AccessDeniedException;
 import com.study.SpringSecurityMybatis.exception.NotFoundBoardException;
 import com.study.SpringSecurityMybatis.repository.BoardLikeMapper;
 import com.study.SpringSecurityMybatis.repository.BoardMapper;
+import com.study.SpringSecurityMybatis.repository.CommentMapper;
 import com.study.SpringSecurityMybatis.security.principal.PrincipalUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -29,16 +32,39 @@ public class BoardService {
     private BoardMapper boardMapper;
 
     @Autowired
+    private CommentMapper commentMapper;
+
+    @Autowired
     private BoardLikeMapper boardLikeMapper;
 
     public Long writeBoard(ReqWriteBoardDto dto) {
+        Board board = dto.toEntity();
+        boardMapper.save(board);
+        return board.getId();
+
+    }
+
+//    public void modifyBoard(ReqModifyBoardDto dto) {
+//        accessCheck(dto.getBoardId());
+//        boardMapper.modifyBoard(dto)
+//
+//    }
+
+    public void deleteBoard(Long boardId) {
+        accessCheck(boardId);
+        boardMapper.deleteBoardById(boardId);
+        commentMapper.deleteByBoardId(boardId);
+    }
+
+    private void accessCheck(Long boardId) {
         PrincipalUser principalUser = (PrincipalUser) SecurityContextHolder
                 .getContext()
                 .getAuthentication()
                 .getPrincipal();
-        Board board = dto.toEntity();
-        boardMapper.save(board);
-        return board.getId();
+        Board board = boardMapper.findById(boardId);
+        if(principalUser.getId() != board.getUserId()) {
+            throw new AccessDeniedException();
+        }
 
     }
 

@@ -37,7 +37,6 @@ public class CommentService {
     }
 
     public void modifyComment(ReqModifyCommentDto dto) {
-
         accessCheck(dto.getCommentId());
         commentMapper.updateById(dto.toEntity());
     }

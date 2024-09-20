@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Builder
 @Data
-public class PrincipalUser implements UserDetails {
+public class PrincipalUser implements UserDetails { // 인증 및 권한 부여를 처리하는 데 사용
 
     private Long id;
     private String username;
@@ -22,8 +22,8 @@ public class PrincipalUser implements UserDetails {
     private Set<UserRoles> roles;
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(
+    public Collection<? extends GrantedAuthority> getAuthorities() { // 사용자 권한을 반환
+        return roles.stream().map( // roles를 스트림으로 변환한 후 SimpleGrantedAuthority 객체로 매핑한다.
                 ur -> new SimpleGrantedAuthority(ur.getRole().getName())
         ).collect(Collectors.toSet());
     }

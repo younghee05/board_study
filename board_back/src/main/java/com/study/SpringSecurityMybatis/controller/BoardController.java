@@ -1,9 +1,8 @@
 package com.study.SpringSecurityMybatis.controller;
 
 import com.study.SpringSecurityMybatis.aspect.annotation.ValidAop;
-import com.study.SpringSecurityMybatis.dto.request.ReqBoardListDto;
-import com.study.SpringSecurityMybatis.dto.request.ReqSearchBoardDto;
-import com.study.SpringSecurityMybatis.dto.request.ReqWriteBoardDto;
+import com.study.SpringSecurityMybatis.dto.request.*;
+import com.study.SpringSecurityMybatis.entity.Board;
 import com.study.SpringSecurityMybatis.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +22,18 @@ public class BoardController {
     @PostMapping("/board")
     public ResponseEntity<?> write(@Valid @RequestBody ReqWriteBoardDto dto, BindingResult bindingResult) {
         return ResponseEntity.ok().body(Map.of("boardId", boardService.writeBoard(dto)));
+    }
+
+    @PutMapping("/board/detail/{boardId}")
+    public ResponseEntity<?> boardModify(@RequestBody ReqModifyBoardDto dto) {
+        System.out.println(dto);
+        return ResponseEntity.ok().body(null);
+    }
+
+    @DeleteMapping("/board/detail/{boardId}")
+    public ResponseEntity<?> boardDelete(@PathVariable Long boardId) {
+        boardService.deleteBoard(boardId);
+        return ResponseEntity.ok().body(true);
     }
 
     @GetMapping("/board/search")

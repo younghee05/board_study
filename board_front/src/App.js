@@ -15,6 +15,7 @@ import DetailPage from './pages/boardPages/DetailPage/DetailPage';
 import NumberBoardListPage from './pages/boardPages/NumberBoardListPage/NumberBoardListPage';
 import ScrollBoardListPage from './pages/boardPages/ScrollBoardListPage/ScrollBoardListPage';
 import SearchBoardPage from './pages/boardPages/SearchBoardPage/SearchBoardPage';
+import ModifyPage from './pages/boardPages/ModifyPage/ModifyPage';
 
 function App() {
 
@@ -139,6 +140,7 @@ function App() {
                 <Route path="/board/scroll" element={ <ScrollBoardListPage /> }/> 
                 <Route path="/board/detail/:boardId" element={ <DetailPage/> }/> 
                 <Route path="/board/write" element={ <WritePage /> }/>
+                <Route path="/board/modify/:boardId" element={ <ModifyPage /> }/>
 
                 <Route path="/admin/*" element={ <></> }/>
                 
