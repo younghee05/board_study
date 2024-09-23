@@ -24,10 +24,10 @@ public class BoardController {
         return ResponseEntity.ok().body(Map.of("boardId", boardService.writeBoard(dto)));
     }
 
-    @PutMapping("/board/detail/{boardId}")
+    @PutMapping("/board/modify/{boardId}")
     public ResponseEntity<?> boardModify(@RequestBody ReqModifyBoardDto dto) {
-        System.out.println(dto);
-        return ResponseEntity.ok().body(null);
+        boardService.modifyBoard(dto);
+        return ResponseEntity.ok().body(true);
     }
 
     @DeleteMapping("/board/detail/{boardId}")

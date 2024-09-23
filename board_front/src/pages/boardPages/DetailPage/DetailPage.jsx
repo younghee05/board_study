@@ -333,8 +333,9 @@ function DetailPage(props) {
 
     // 게시글 수정 & 삭제
     const handleDeleteOnClick = () => {
-        deleteBoardMutation.mutateAsync(boardId);
-        
+        if(window.confirm("게시글을 삭제하시겠습니까?")) {
+            deleteBoardMutation.mutateAsync(boardId);
+        };
     };
 
     const handleModifyOnClick = () => {
@@ -384,7 +385,16 @@ function DetailPage(props) {
     };
 
     const handleCommentModifySubmitOnClick = () => {
-        modifyCommentMutation.mutateAsync();
+        if(!commentModifyData.content.trim()) {
+            alert("공백일 수 없습니다.");
+            return;
+        };
+
+        try {
+            modifyCommentMutation.mutateAsync();            
+        } catch (error) {
+            
+        }
     }
 
     const handleReplyButtonOnClick = (commentId) => {

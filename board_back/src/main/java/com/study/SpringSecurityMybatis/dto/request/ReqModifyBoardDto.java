@@ -9,7 +9,11 @@ public class ReqModifyBoardDto {
     private String title;
     private String content;
 
-//    public Board toEntity() {
-//        return
-//    }
+    public Board toEntity() {
+        return Board.builder()
+                .id(boardId)
+                .title(title)
+                .content(content)
+                .build();
+    }
 }

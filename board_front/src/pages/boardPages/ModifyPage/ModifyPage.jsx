@@ -12,7 +12,7 @@ import { CircleLoader, RingLoader } from "react-spinners";
 import { boardApi } from "../../../apis/boardApi";
 import { useNavigate, useParams } from "react-router-dom";
 import { instance } from "../../../apis/util/instance";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 
 Quill.register("modules/ImageResize", ImageResize);
 
@@ -96,8 +96,10 @@ const loadingLayout = css`
 function ModifyPage(props) {
     const navigate = useNavigate();
     const params = useParams();
+    const boardId = params.boardId;
 
-    const [ board, setBoard ] = useState({
+    const [ modifyBoardData, setModifyBoardData ] = useState({
+        boardId,
         title: "",
         content: ""
     });
@@ -107,34 +109,83 @@ function ModifyPage(props) {
 
     const modifyBoard = useQuery(
         ["modifyBoardQuery"],
-        async () => await instance.get(`/board/${params.boardId}`),
+        async () => await instance.get(`/board/${boardId}`),
         {
             retry: 0,
             refetchOnWindowFocus: false,
             onSuccess: response => {
                 console.log(response);
-                setBoard({
+                setModifyBoardData({
+                    boardId,
                     title: response.data.title,
                     content: response.data.content
                 })
             }
         }
     );
+    
+    const modifyBoardMutation = useMutation(
+        async() => await instance.put(`/board/modify/${modifyBoardData.boardId}`, modifyBoardData), 
+        {
+            onSuccess: response => {
+                console.log(response);
+                alert("수정이 완료되었습니다");
+                setModifyBoardData({
+                    boardId,
+                    title: "",
+                    content: ""
+                });
+                modifyBoard.refetch();
+                navigate(-1);
 
-    // async await 쓴 예시
-    const handleWriteSubmitOnClick = async() => {
+            }
+        }
+    );
+
+    const handleModifyBoardSubmitOnClick = async () => {
+        const modifyBoardConfirm = window.confirm("수정하시겠습니까?");
+
+        if(!modifyBoardData.title.trim()) {
+            alert("제목은 공백일 수 없습니다.");
+            return;
+        }
+
+        if(!modifyBoardData.content.trim()) {
+            alert("내용은 공백일 수 없습니다.")
+            return;
+        }
+
+        if(modifyBoardConfirm) {
+            try {
+                await modifyBoardMutation.mutateAsync();
+            } catch (error) {
+                const fieldErrors = error.response.data;
+                    for (let fieldError of fieldErrors) {
+                        if(fieldError.field === "title") {
+                            alert(fieldError.defaultMessage);
+                            return;
+                        }
+                    }
+                    for (let fieldError of fieldErrors) {
+                        if (fieldError.field === "content") {
+                            alert(fieldError.defaultMessage);
+                            break;
+                        }
+                    }
+            }
+        };
         
     }
 
     const handleTitleInputOnChange = (e) => {
-        setBoard(board => ({
+        setModifyBoardData(board => ({
             ...board,
             [e.target.name]: e.target.value,
         }));
     }
     
     const handleQuillValueOnChang = (value) => {
-        setBoard(board => ({
+        setModifyBoardData(board => ({
             ...board,
             content: quillRef.current.getEditor().getText().trim() === "" ? "" : value, 
         }));
@@ -165,7 +216,7 @@ function ModifyPage(props) {
                     editor.setSelection(editPoint.index + 1);
                     editor.insertText(editPoint.index + 1, "\n");
                     setUploading(false);
-                    setBoard(board => ({
+                    setModifyBoardData(board => ({
                         ...board,
                         content: editor.root.innerHTML,
                     }));
@@ -192,10 +243,10 @@ function ModifyPage(props) {
                 <h1>게시글 수정</h1>
                 <div css={modifyButton}>
                     <button onClick={() => navigate(-1)} >취소하기</button>
-                    <button onClick={handleWriteSubmitOnClick} >수정하기</button>
+                    <button onClick={handleModifyBoardSubmitOnClick} >수정하기</button>
                 </div>
             </header>
-            <input css={titleInput} type="text" name="title" onChange={handleTitleInputOnChange} value={board.title} placeholder="게시글의 제목을 입력하세요."/>
+            <input css={titleInput} type="text" name="title" onChange={handleTitleInputOnChange} value={modifyBoardData.title} placeholder="게시글의 제목을 입력하세요."/>
             <div css={editorLayout}>
                 {
                     isUploading &&
@@ -224,7 +275,7 @@ function ModifyPage(props) {
                         },
                         
                     }}
-                    value={board.content}
+                    value={modifyBoardData.content}
 
                 />
 

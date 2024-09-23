@@ -36,7 +36,7 @@
     <update id="modifyBoard">
         update board
         set
-            title = #{title}
+            title = #{title},
             content = #{content}
         where
             id = #{id}

@@ -44,11 +44,11 @@ public class BoardService {
 
     }
 
-//    public void modifyBoard(ReqModifyBoardDto dto) {
-//        accessCheck(dto.getBoardId());
-//        boardMapper.modifyBoard(dto)
-//
-//    }
+    public void modifyBoard(ReqModifyBoardDto dto) {
+        accessCheck(dto.getBoardId());
+        boardMapper.modifyBoard(dto.toEntity());
+
+    }
 
     public void deleteBoard(Long boardId) {
         accessCheck(boardId);
