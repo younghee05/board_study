@@ -21,12 +21,18 @@ export const signinApi = async (user) => {
         const response = error.response;
         signinData = {
             isSuccess: false,
+        };
+
+        if(response.status === 403) {
+            signinData['errorStatus'] = "validEmail";
+            signinData['error'] = response.data;
+            return signinData;
         }
 
         if(typeof(response.data) === 'string') {
             signinData['errorStatus'] = "loginError";
             signinData['error'] = response.data;
-        } 
+        }; 
         
         if(typeof(response.data) === 'string') {
             signinData['errorStatus'] = "fieldError";

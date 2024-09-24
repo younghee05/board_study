@@ -71,3 +71,5 @@
 --BEGIN
 --    delete from comment where parent_id = old.id -- old.id = 원래 id
 --END;
+
+ALTER TABLE USER ADD COLUMN email_valid INT NOT NULL DEFAULT 0;

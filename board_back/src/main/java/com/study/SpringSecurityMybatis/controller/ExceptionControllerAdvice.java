@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.naming.AuthenticationException;
+import java.util.Map;
 
 @RestControllerAdvice
 public class ExceptionControllerAdvice {
@@ -39,5 +40,13 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<?> accessDeniedException(AccessDeniedException e) {
         return ResponseEntity.status(403).body(e.getMessage());
+    }
+
+    @ExceptionHandler(EmailValidException.class)
+    public ResponseEntity<?> emailValidException(EmailValidException e) {
+        return ResponseEntity.status(403).body(Map.of(
+                "message", e.getMessage(),
+                "email", e.getEmail()
+        ));
     }
 }

@@ -16,6 +16,7 @@ import NumberBoardListPage from './pages/boardPages/NumberBoardListPage/NumberBo
 import ScrollBoardListPage from './pages/boardPages/ScrollBoardListPage/ScrollBoardListPage';
 import SearchBoardPage from './pages/boardPages/SearchBoardPage/SearchBoardPage';
 import ModifyPage from './pages/boardPages/ModifyPage/ModifyPage';
+import MailPage from './pages/MailPage/MailPage';
 
 function App() {
 
@@ -129,6 +130,7 @@ function App() {
     return (
             <Routes>
                 <Route path="/" element={ <IndexPage /> }/>
+                <Route path="/mail" element={ <MailPage /> }/>
                 <Route path="/user/join" element={ <UserJoinPage /> }/>
                 <Route path="/user/join/oauth2" element={ <OAuth2JoinPage /> }/>
                 <Route path="/user/login" element={ <UserLoginPage /> }/>

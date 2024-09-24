@@ -18,7 +18,7 @@ export const signupApi = async (user) => {
         const response = await instance.post("/auth/signup", user);
         signupData = {
             isSuccess: true,
-            ok: response.data
+            ok: response.data // data = dto
         }
     } catch (error) {
         const response = error.response;

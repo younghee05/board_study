@@ -17,4 +17,6 @@ public interface UserMapper {
     int deleteById(Long id);
 
     int modifyImgById(@Param("id") Long id, @Param("img") String img);
+
+    int modifyEmailValidByUsername(String username);
 }

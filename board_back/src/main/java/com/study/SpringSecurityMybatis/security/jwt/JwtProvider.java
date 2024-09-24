@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
+import javax.xml.crypto.Data;
 import java.security.Key;
 import java.util.Date;
 
@@ -35,6 +36,16 @@ public class JwtProvider {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
+
+    public String generateEmailValidToken(String username) {
+        Date expireData = new Date(new Date().getTime() + (1000l * 60 * 5));
+        return Jwts.builder()
+                .claim("username", username)
+                .expiration(expireData)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
     public String removeBearer(String bearerToken) throws RuntimeException {
         if(bearerToken == null) {
             throw new RuntimeException();

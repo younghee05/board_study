@@ -20,6 +20,7 @@ public class User {
     private String password;
     private String name;
     private String email;
+    private int emailValid;
     private String img;
     private Set<OAuth2User> oAuth2Users;
     private Set<UserRoles> userRoles;
@@ -28,6 +29,7 @@ public class User {
         return PrincipalUser.builder()
                 .id(id)
                 .username(username)
+                .password(password)
                 .roles(userRoles)
                 .build();
     }

@@ -108,7 +108,17 @@ function UserLoginPage(props) {
                 alert(signinData.error);
             }
 
-            if(signinData)
+            if(signinData.errorStatus === 'validEmail') {
+                if(window.confirm(`${signinData.error.message}`)) {
+                    const response = await instance.post("/auth/mail", {
+                        toEmail: signinData.error.email,
+                        username: inputUser.username
+                    });
+                    if(response.status === 200) {
+                        alert("인증메일을 전송하였습니다.");
+                    }
+                };
+            }
             
             return; 
         }
